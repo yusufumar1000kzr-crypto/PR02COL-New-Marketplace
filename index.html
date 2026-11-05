@@ -1,1 +1,195 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PR02COL | Digital Marketplace</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:Arial,sans-serif;
+  background:#080d1b;color:white;
+}
+header{
+  display:flex;justify-content:space-between;
+  align-items:center;padding:20px 7%;
+  background:#10182b;position:sticky;top:0;
+  z-index:10;border-bottom:1px solid #26334b;
+}
+.logo{font-size:25px;font-weight:bold;color:#8b7cff}
+nav a{
+  color:white;text-decoration:none;
+  margin-left:18px;font-size:14px;
+}
+nav a:hover{color:#9c8cff}
+.hero{
+  padding:85px 8%;text-align:center;
+  background:linear-gradient(135deg,#111c3d,#31216a,#10182b);
+}
+.hero h1{font-size:42px;margin-bottom:18px}
+.hero h1 span{color:#a99aff}
+.hero p{color:#c5cbe0;line-height:1.8;max-width:600px;margin:auto}
+.btn{
+  display:inline-block;padding:14px 25px;
+  margin:25px 7px 0;border-radius:8px;
+  text-decoration:none;font-weight:bold;
+}
+.primary{background:#8065ff;color:white}
+.secondary{border:1px solid #9c8cff;color:white}
+section{padding:55px 7%}
+.section-title{text-align:center;margin-bottom:30px}
+.section-title p{color:#9ca8c3;margin-top:10px}
+.stats,.services{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:18px;
+}
+.card{
+  background:#141e33;padding:25px;
+  border:1px solid #293650;border-radius:13px;
+}
+.card h3{margin-bottom:12px;color:#a99aff}
+.card p{color:#bac4d8;line-height:1.6;font-size:14px}
+.number{font-size:28px;font-weight:bold;margin-bottom:8px}
+.card a{color:#a99aff;text-decoration:none}
+.wallet{
+  text-align:center;background:linear-gradient(120deg,#29215c,#18294a);
+  border-radius:15px;padding:35px;margin-top:25px;
+}
+.wallet h2{margin-bottom:12px}
+.wallet .amount{font-size:32px;font-weight:bold;color:#a99aff}
+footer{
+  background:#10182b;text-align:center;
+  padding:25px;color:#9ca8c3;font-size:13px;
+}
+@media(max-width:600px){
+  header{padding:16px 5%;flex-wrap:wrap;gap:15px}
+  nav{width:100%;display:flex;gap:15px;overflow-x:auto}
+  nav a{margin:0;white-space:nowrap}
+  .hero{padding:65px 6%}
+  .hero h1{font-size:32px}
+  section{padding:40px 5%}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">PR02COL</div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#services">Services</a>
+    <a href="#wallet">Wallet</a>
+    <a href="#about">About</a>
+    <a href="#account">Account</a>
+  </nav>
+</header>
+
+<div class="hero" id="home">
+  <h1>Welcome to <span>PR02COL</span></h1>
+  <p>
+    Your digital marketplace for social media promotion
+    and digital services. Discover services, manage orders
+    and enjoy a simple marketplace experience.
+  </p>
+  <a href="#services" class="btn primary">Explore Services</a>
+  <a href="#account" class="btn secondary">Get Started</a>
+</div>
+
+<section>
+  <div class="section-title">
+    <h2>Our Marketplace</h2>
+    <p>Everything you need in one place.</p>
+  </div>
+
+  <div class="stats">
+    <div class="card">
+      <div class="number">₦0.00</div>
+      <p>Wallet balance preview</p>
+    </div>
+    <div class="card">
+      <div class="number">0</div>
+      <p>Customer orders</p>
+    </div>
+    <div class="card">
+      <div class="number">0</div>
+      <p>Completed purchases</p>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="section-title">
+    <h2>Explore Our Services</h2>
+    <p>Choose from our digital marketplace categories.</p>
+  </div>
+
+  <div class="services">
+    <div class="card">
+      <h3>📱 Social Media Promotion</h3>
+      <p>Discover legitimate promotional services for your social media content and business.</p>
+    </div>
+
+    <div class="card">
+      <h3>🌍 International Numbers</h3>
+      <p>Explore legitimate international phone-number services with clear usage information.</p>
+    </div>
+
+    <div class="card">
+      <h3>📢 Digital Advertising</h3>
+      <p>Promote your products, brands and online business.</p>
+    </div>
+
+    <div class="card">
+      <h3>💳 Digital Payments</h3>
+      <p>Manage your marketplace payments and orders.</p>
+    </div>
+  </div>
+</section>
+
+<section id="wallet">
+  <div class="wallet">
+    <h2>My Wallet</h2>
+    <p>Your marketplace wallet balance</p>
+    <div class="amount">₦0.00</div>
+    <p style="margin-top:12px">Wallet dashboard coming soon.</p>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-title">
+    <h2>Why Choose PR02COL?</h2>
+    <p>A simple and convenient digital marketplace.</p>
+  </div>
+  <div class="services">
+    <div class="card">
+      <h3>Easy Experience</h3>
+      <p>Simple navigation and a clean interface.</p>
+    </div>
+    <div class="card">
+      <h3>Order Management</h3>
+      <p>Track your orders and transaction history.</p>
+    </div>
+    <div class="card">
+      <h3>Customer Support</h3>
+      <p>Get help when you need assistance.</p>
+    </div>
+  </div>
+</section>
+
+<section id="account">
+  <div class="section-title">
+    <h2>Join PR02COL Today</h2>
+    <p>Customer registration and login will be connected in the next stage.</p>
+    <a href="mailto:support@pr02col.com" class="btn primary">Contact Support</a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 PR02COL Marketplace. All rights reserved.</p>
+  <p style="margin-top:8px">Your Digital Marketplace.</p>
+</footer>
+
+</body>
+</html>
+
