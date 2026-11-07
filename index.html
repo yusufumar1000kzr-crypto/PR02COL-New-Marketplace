@@ -1,249 +1,168 @@
 here
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PR02COL Marketplace</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:#080808;color:white;font-family:Arial,sans-serif}
-header{padding:20px 6%;background:#000;border-bottom:2px solid #f00;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
-.logo{font-size:27px;font-weight:bold}.logo span{color:red}
-nav{display:flex;gap:18px;flex-wrap:wrap}
-nav a{color:white;text-decoration:none;font-size:14px}
-nav a:hover{color:red}
-.hero{text-align:center;padding:75px 6%;background:radial-gradient(circle at top right,#470000,#080808 65%)}
-h1{font-size:42px;margin-bottom:18px}
-h1 span,.red{color:#f11}
-.hero p{color:#bbb;line-height:1.7;max-width:600px;margin:auto}
-section{padding:45px 6%}
-.heading{text-align:center;margin-bottom:25px}
-.heading p{color:#aaa;margin-top:10px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:17px}
-.card{background:#171717;border:1px solid #333;border-radius:12px;padding:23px}
-.card h3{color:#ff2929;margin-bottom:12px}
-.card p{color:#bbb;line-height:1.6;font-size:14px}
-button,.btn{background:#e00000;color:white;border:0;border-radius:7px;padding:13px 20px;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block}
-button:hover,.btn:hover{background:#a90000}
-.outline{background:transparent;border:1px solid red}
-input{display:block;width:100%;padding:14px;margin:12px 0;background:#080808;border:1px solid #444;border-radius:7px;color:white}
-.panel{max-width:480px;margin:20px auto}
-.form-card{background:#171717;border:1px solid #444;padding:25px;border-radius:12px}
-.form-card h2{text-align:center;margin-bottom:15px}
-.form-card p{text-align:center;color:#aaa;font-size:14px;margin-top:15px}
-.form-card a{color:#ff3333;cursor:pointer}
-.hidden{display:none!important}
-.balance{font-size:30px;color:#ff2929;font-weight:bold;margin-top:12px}
-.notice{color:#aaa;font-size:13px;line-height:1.6;margin-top:12px}
-.status{color:#ff7777;font-size:14px;margin-top:12px;line-height:1.5}
-footer{text-align:center;background:#000;padding:25px;color:#999;border-top:1px solid #333}
-@media(max-width:600px){h1{font-size:32px}header{padding:17px 5%}nav{gap:12px}}
-</style>
-</head>
-<body>
+-- PR02COL MARKETPLACE DATABASE
 
-<header>
-<div class="logo">PR02<span>COL</span></div>
-<nav>
-<a href="#home">Home</a>
-<a href="#services">Services</a>
-<a href="#account">Account</a>
-<button id="logoutBtn" class="hidden" onclick="logout()">Logout</button>
-</nav>
-</header>
-
-<div id="home">
-<div class="hero">
-<h1>Welcome to <span>PR02COL</span></h1>
-<p>Your digital marketplace for digital services, social media promotion and business solutions.</p>
-<a href="#services" class="btn">Explore Services</a>
-<a href="#account" class="btn outline">Get Started</a>
-</div>
-
-<section>
-<div class="heading">
-<h2>Our Marketplace</h2>
-<p>Simple digital services in one place.</p>
-</div>
-<div class="grid">
-<div class="card"><h3>Digital Marketing</h3><p>Discover legitimate ways to promote your business online.</p></div>
-<div class="card"><h3>Advertising</h3><p>Explore digital advertising solutions for your brand.</p></div>
-<div class="card"><h3>Business Solutions</h3><p>Find useful digital tools for your business.</p></div>
-</div>
-</section>
-
-<section id="services">
-<div class="heading"><h2>Our Services</h2><p>Explore the PR02COL marketplace.</p></div>
-<div class="grid">
-<div class="card"><h3>Social Media Promotion</h3><p>Promote your content through legitimate advertising campaigns.</p></div>
-<div class="card"><h3>Digital Advertising</h3><p>Reach genuine audiences and grow your business.</p></div>
-<div class="card"><h3>Business Tools</h3><p>Discover digital tools and resources for your business.</p></div>
-</div>
-</section>
-</div>
-
-<section id="account">
-<div id="authArea" class="panel">
-<div class="form-card" id="registerBox">
-<h2>Create Your Account</h2>
-<input id="regName" placeholder="Full name" autocomplete="name">
-<input id="regEmail" type="email" placeholder="Email address" autocomplete="email">
-<input id="regPassword" type="password" placeholder="Create password" autocomplete="new-password">
-<button style="width:100%" onclick="register()">Create Account</button>
-<p>Already registered? <a onclick="showLogin()">Login here</a></p>
-<div id="regMessage" class="status"></div>
-</div>
-
-<div class="form-card hidden" id="loginBox">
-<h2>Customer Login</h2>
-<input id="loginEmail" type="email" placeholder="Email address" autocomplete="email">
-<input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password">
-<button style="width:100%" onclick="login()">Login</button>
-<p>New customer? <a onclick="showRegister()">Create account</a></p>
-<div id="loginMessage" class="status"></div>
-</div>
-</div>
-
-<div id="dashboard" class="hidden">
-<div class="heading">
-<h2>Welcome, <span id="customerName" class="red">Customer</span></h2>
-<p>Your PR02COL customer dashboard</p>
-</div>
-<div class="grid">
-<div class="card">
-<h3>My Wallet</h3>
-<div class="balance">₦0.00</div>
-<p>Wallet balance</p>
-</div>
-<div class="card">
-<h3>My Orders</h3>
-<div class="balance">0</div>
-<p>Orders will appear here.</p>
-</div>
-<div class="card">
-<h3>Transactions</h3>
-<div class="balance">0</div>
-<p>Your transaction history.</p>
-</div>
-</div>
-<div class="card" style="margin-top:20px">
-<h3>Account Information</h3>
-<p id="customerEmail"></p>
-<p class="notice">Your account is connected. Wallet funding, payments and order history will be added after secure database setup.</p>
-</div>
-</div>
-</section>
-
-<footer>© 2026 PR02COL Marketplace. All rights reserved.</footer>
-
-<script>
-// PR02COL Supabase connection
-const SUPABASE_URL = "https://tyvmpcfqkaejibynxvpz.supabase.co";
-const SUPABASE_KEY = "sb_publishable_qY4iV-lxu-ya_XYN_Vj7lQ_Jiro2k_x";
-
-const db = window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
+-- 1. Customer profiles
+create table if not exists public.profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  full_name text,
+  created_at timestamptz default now()
 );
 
-function message(id,text){
-document.getElementById(id).textContent=text;
-}
+-- 2. Customer wallets
+create table if not exists public.wallets (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  balance numeric(12,2) not null default 0 check (balance >= 0),
+  currency text not null default 'NGN',
+  updated_at timestamptz default now()
+);
 
-function showLogin(){
-document.getElementById("registerBox").classList.add("hidden");
-document.getElementById("loginBox").classList.remove("hidden");
-}
+-- 3. Transaction history
+create table if not exists public.transactions (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  transaction_type text not null,
+  amount numeric(12,2) not null check (amount >= 0),
+  description text,
+  status text not null default 'pending',
+  created_at timestamptz default now()
+);
 
-function showRegister(){
-document.getElementById("loginBox").classList.add("hidden");
-document.getElementById("registerBox").classList.remove("hidden");
-}
+-- 4. Marketplace services
+create table if not exists public.services (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  description text,
+  price numeric(12,2) not null default 0,
+  category text,
+  active boolean not null default true,
+  created_at timestamptz default now()
+);
 
-async function register(){
-const name=document.getElementById("regName").value.trim();
-const email=document.getElementById("regEmail").value.trim();
-const password=document.getElementById("regPassword").value;
+-- 5. Customer orders
+create table if not exists public.orders (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  service_id uuid references public.services(id),
+  amount numeric(12,2) not null check (amount >= 0),
+  status text not null default 'pending',
+  created_at timestamptz default now()
+);
 
-if(!name||!email||!password){
-message("regMessage","Please complete all fields.");
-return;
-}
-if(password.length<8){
-message("regMessage","Password must have at least 8 characters.");
-return;
-}
+-- 6. Customer notifications
+create table if not exists public.notifications (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  title text not null,
+  message text,
+  is_read boolean not null default false,
+  created_at timestamptz default now()
+);
 
-message("regMessage","Creating your account...");
+-- 7. Customer support
+create table if not exists public.support_tickets (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  subject text not null,
+  message text not null,
+  status text not null default 'open',
+  created_at timestamptz default now()
+);
 
-const {data,error}=await db.auth.signUp({
-email,
-password,
-options:{data:{full_name:name}}
-});
+-- ENABLE SECURITY
+alter table public.profiles enable row level security;
+alter table public.wallets enable row level security;
+alter table public.transactions enable row level security;
+alter table public.services enable row level security;
+alter table public.orders enable row level security;
+alter table public.notifications enable row level security;
+alter table public.support_tickets enable row level security;
 
-if(error){
-message("regMessage",error.message);
-return;
-}
+-- PROFILES
+drop policy if exists "Read own profile" on public.profiles;
+create policy "Read own profile"
+on public.profiles for select to authenticated
+using (auth.uid() = id);
 
-if(data.session){
-showDashboard(data.user);
-}else{
-message("regMessage","Registration successful. Please check your email if confirmation is required.");
-}
-}
+drop policy if exists "Update own profile" on public.profiles;
+create policy "Update own profile"
+on public.profiles for update to authenticated
+using (auth.uid() = id)
+with check (auth.uid() = id);
 
-async function login(){
-const email=document.getElementById("loginEmail").value.trim();
-const password=document.getElementById("loginPassword").value;
+-- WALLETS: customers can only read their own balance
+drop policy if exists "Read own wallet" on public.wallets;
+create policy "Read own wallet"
+on public.wallets for select to authenticated
+using (auth.uid() = user_id);
 
-if(!email||!password){
-message("loginMessage","Enter your email and password.");
-return;
-}
+-- TRANSACTIONS: customers can only read their own history
+drop policy if exists "Read own transactions" on public.transactions;
+create policy "Read own transactions"
+on public.transactions for select to authenticated
+using (auth.uid() = user_id);
 
-message("loginMessage","Logging in...");
+-- SERVICES: everyone can view active services
+drop policy if exists "Read active services" on public.services;
+create policy "Read active services"
+on public.services for select to authenticated
+using (active = true);
 
-const {data,error}=await db.auth.signInWithPassword({
-email,password
-});
+-- ORDERS: customers can read their own orders
+drop policy if exists "Read own orders" on public.orders;
+create policy "Read own orders"
+on public.orders for select to authenticated
+using (auth.uid() = user_id);
 
-if(error){
-message("loginMessage",error.message);
-return;
-}
+-- NOTIFICATIONS
+drop policy if exists "Read own notifications" on public.notifications;
+create policy "Read own notifications"
+on public.notifications for select to authenticated
+using (auth.uid() = user_id);
 
-showDashboard(data.user);
-}
+-- SUPPORT TICKETS
+drop policy if exists "Read own support tickets" on public.support_tickets;
+create policy "Read own support tickets"
+on public.support_tickets for select to authenticated
+using (auth.uid() = user_id);
 
-function showDashboard(user){
-document.getElementById("home").classList.add("hidden");
-document.getElementById("authArea").classList.add("hidden");
-document.getElementById("dashboard").classList.remove("hidden");
-document.getElementById("logoutBtn").classList.remove("hidden");
-document.getElementById("customerName").textContent=
-user.user_metadata?.full_name || "Customer";
-document.getElementById("customerEmail").textContent=
-"Email: "+user.email;
-document.getElementById("account").scrollIntoView();
-}
+drop policy if exists "Create own support tickets" on public.support_tickets;
+create policy "Create own support tickets"
+on public.support_tickets for insert to authenticated
+with check (auth.uid() = user_id);
 
-async function logout(){
-await db.auth.signOut();
-location.reload();
-}
+-- AUTOMATIC CUSTOMER PROFILE AND WALLET
+create or replace function public.create_customer_records()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  insert into public.profiles (id, full_name)
+  values (new.id, new.raw_user_meta_data ->> 'full_name')
+  on conflict (id) do nothing;
 
-async function checkSession(){
-const {data}=await db.auth.getSession();
-if(data.session){
-showDashboard(data.session.user);
-}
-}
+  insert into public.wallets (user_id, balance, currency)
+  values (new.id, 0, 'NGN')
+  on conflict (user_id) do nothing;
 
-checkSession();
-</script>
-</body>
-</html>
+  return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+
+create trigger on_auth_user_created
+after insert on auth.users
+for each row execute function public.create_customer_records();
+
+-- CREATE RECORDS FOR EXISTING CUSTOMERS
+insert into public.profiles (id, full_name)
+select id, raw_user_meta_data ->> 'full_name'
+from auth.users
+on conflict (id) do nothing;
+
+insert into public.wallets (user_id, balance, currency)
+select id, 0, 'NGN'
+from auth.users
+on conflict (user_id) do nothing;
