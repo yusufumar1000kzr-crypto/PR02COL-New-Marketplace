@@ -1,314 +1,249 @@
-
+here
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PR02COL - Digital Marketplace</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PR02COL Marketplace</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-
-:root{
---red:#ff1010;
---black:#050505;
---card:#151515;
---white:#ffffff;
---grey:#bdbdbd;
-}
-
-body{
-font-family:Arial,sans-serif;
-background:var(--black);
-color:var(--white);
-}
-
-header{
-background:#000;
-padding:20px 6%;
-display:flex;
-justify-content:space-between;
-align-items:center;
-flex-wrap:wrap;
-border-bottom:2px solid var(--red);
-position:sticky;
-top:0;
-z-index:10;
-}
-
-.logo{
-font-size:27px;
-font-weight:bold;
-letter-spacing:1px;
-}
-
-.logo span{color:var(--red)}
-
-nav{
-display:flex;
-gap:20px;
-flex-wrap:wrap;
-}
-
-nav a{
-color:white;
-text-decoration:none;
-font-size:14px;
-font-weight:bold;
-}
-
-nav a:hover{color:var(--red)}
-
-.hero{
-padding:90px 7%;
-background:radial-gradient(circle at right,#410000,#090909 65%);
-}
-
-.hero h1{
-font-size:45px;
-margin-bottom:20px;
-}
-
-.hero h1 span{color:var(--red)}
-
-.hero p{
-color:var(--grey);
-line-height:1.8;
-max-width:600px;
-font-size:17px;
-}
-
-.btn{
-display:inline-block;
-padding:15px 25px;
-margin:25px 10px 0 0;
-border-radius:8px;
-text-decoration:none;
-font-weight:bold;
-}
-
-.primary{
-background:var(--red);
-color:white;
-}
-
-.secondary{
-border:2px solid var(--red);
-color:white;
-}
-
-section{padding:60px 6%}
-
-.heading{
-text-align:center;
-margin-bottom:35px;
-}
-
-.heading h2{font-size:30px}
-
-.heading span{color:var(--red)}
-
-.heading p{
-color:var(--grey);
-margin-top:10px;
-}
-
-.stats,.services{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:20px;
-}
-
-.card{
-background:linear-gradient(145deg,#181818,#090909);
-border:1px solid #333;
-border-radius:15px;
-padding:27px;
-text-align:center;
-}
-
-.card h3{
-color:var(--red);
-margin-bottom:13px;
-}
-
-.card p{
-color:var(--grey);
-line-height:1.7;
-font-size:14px;
-}
-
-.number{
-font-size:30px;
-font-weight:bold;
-margin-bottom:10px;
-}
-
-.wallet{
-background:linear-gradient(120deg,#350000,#151515);
-border:1px solid var(--red);
-border-radius:15px;
-padding:35px;
-text-align:center;
-}
-
-.wallet h2{margin-bottom:12px}
-
-.amount{
-font-size:35px;
-font-weight:bold;
-color:var(--red);
-}
-
-footer{
-background:#000;
-border-top:1px solid #333;
-text-align:center;
-padding:30px;
-color:var(--grey);
-}
-
-@media(max-width:600px){
-header{gap:18px}
-nav{gap:15px}
-.hero{padding:65px 6%}
-.hero h1{font-size:34px}
-section{padding:45px 5%}
-}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#080808;color:white;font-family:Arial,sans-serif}
+header{padding:20px 6%;background:#000;border-bottom:2px solid #f00;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
+.logo{font-size:27px;font-weight:bold}.logo span{color:red}
+nav{display:flex;gap:18px;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;font-size:14px}
+nav a:hover{color:red}
+.hero{text-align:center;padding:75px 6%;background:radial-gradient(circle at top right,#470000,#080808 65%)}
+h1{font-size:42px;margin-bottom:18px}
+h1 span,.red{color:#f11}
+.hero p{color:#bbb;line-height:1.7;max-width:600px;margin:auto}
+section{padding:45px 6%}
+.heading{text-align:center;margin-bottom:25px}
+.heading p{color:#aaa;margin-top:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:17px}
+.card{background:#171717;border:1px solid #333;border-radius:12px;padding:23px}
+.card h3{color:#ff2929;margin-bottom:12px}
+.card p{color:#bbb;line-height:1.6;font-size:14px}
+button,.btn{background:#e00000;color:white;border:0;border-radius:7px;padding:13px 20px;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block}
+button:hover,.btn:hover{background:#a90000}
+.outline{background:transparent;border:1px solid red}
+input{display:block;width:100%;padding:14px;margin:12px 0;background:#080808;border:1px solid #444;border-radius:7px;color:white}
+.panel{max-width:480px;margin:20px auto}
+.form-card{background:#171717;border:1px solid #444;padding:25px;border-radius:12px}
+.form-card h2{text-align:center;margin-bottom:15px}
+.form-card p{text-align:center;color:#aaa;font-size:14px;margin-top:15px}
+.form-card a{color:#ff3333;cursor:pointer}
+.hidden{display:none!important}
+.balance{font-size:30px;color:#ff2929;font-weight:bold;margin-top:12px}
+.notice{color:#aaa;font-size:13px;line-height:1.6;margin-top:12px}
+.status{color:#ff7777;font-size:14px;margin-top:12px;line-height:1.5}
+footer{text-align:center;background:#000;padding:25px;color:#999;border-top:1px solid #333}
+@media(max-width:600px){h1{font-size:32px}header{padding:17px 5%}nav{gap:12px}}
 </style>
 </head>
-
 <body>
 
 <header>
 <div class="logo">PR02<span>COL</span></div>
-
 <nav>
 <a href="#home">Home</a>
 <a href="#services">Services</a>
-<a href="#wallet">Wallet</a>
-<a href="#about">About</a>
 <a href="#account">Account</a>
+<button id="logoutBtn" class="hidden" onclick="logout()">Logout</button>
 </nav>
 </header>
 
-<div class="hero" id="home">
-<h1>Welcome to<br>PR02<span>COL</span></h1>
-
-<p>
-Your digital marketplace for social media promotion
-and digital services. Discover services, manage orders
-and enjoy a simple marketplace experience.
-</p>
-
-<a href="#services" class="btn primary">Explore Services →</a>
-<a href="#account" class="btn secondary">Get Started</a>
+<div id="home">
+<div class="hero">
+<h1>Welcome to <span>PR02COL</span></h1>
+<p>Your digital marketplace for digital services, social media promotion and business solutions.</p>
+<a href="#services" class="btn">Explore Services</a>
+<a href="#account" class="btn outline">Get Started</a>
 </div>
 
 <section>
 <div class="heading">
-<h2>Our <span>Marketplace</span></h2>
-<p>Everything you need in one place.</p>
+<h2>Our Marketplace</h2>
+<p>Simple digital services in one place.</p>
 </div>
-
-<div class="stats">
-<div class="card">
-<h3>Wallet Balance</h3>
-<div class="number">₦0.00</div>
-<p>Available balance preview</p>
-</div>
-
-<div class="card">
-<h3>Customer Orders</h3>
-<div class="number">0</div>
-<p>Total orders preview</p>
-</div>
-
-<div class="card">
-<h3>Completed Purchases</h3>
-<div class="number">0</div>
-<p>Completed orders preview</p>
-</div>
+<div class="grid">
+<div class="card"><h3>Digital Marketing</h3><p>Discover legitimate ways to promote your business online.</p></div>
+<div class="card"><h3>Advertising</h3><p>Explore digital advertising solutions for your brand.</p></div>
+<div class="card"><h3>Business Solutions</h3><p>Find useful digital tools for your business.</p></div>
 </div>
 </section>
 
 <section id="services">
-<div class="heading">
-<h2>Explore Our <span>Services</span></h2>
-<p>Choose from our digital marketplace categories.</p>
-</div>
-
-<div class="services">
-
-<div class="card">
-<h3>Social Media Promotion</h3>
-<p>Discover legitimate promotional services for your social media content.</p>
-</div>
-
-<div class="card">
-<h3>International Numbers</h3>
-<p>Explore legitimate international phone-number services.</p>
-</div>
-
-<div class="card">
-<h3>Digital Advertising</h3>
-<p>Promote your products, brands and online business.</p>
-</div>
-
-<div class="card">
-<h3>Digital Payments</h3>
-<p>Manage your marketplace payments and orders.</p>
-</div>
-
+<div class="heading"><h2>Our Services</h2><p>Explore the PR02COL marketplace.</p></div>
+<div class="grid">
+<div class="card"><h3>Social Media Promotion</h3><p>Promote your content through legitimate advertising campaigns.</p></div>
+<div class="card"><h3>Digital Advertising</h3><p>Reach genuine audiences and grow your business.</p></div>
+<div class="card"><h3>Business Tools</h3><p>Discover digital tools and resources for your business.</p></div>
 </div>
 </section>
-
-<section id="wallet">
-<div class="wallet">
-<h2>My Wallet</h2>
-<p>Your PR02COL wallet balance</p>
-<div class="amount">₦0.00</div>
-<p style="margin-top:12px;color:#bbb">
-Wallet features coming soon.
-</p>
 </div>
-</section>
-
-<section id="about">
-<div class="heading">
-<h2>Why Choose <span>PR02COL?</span></h2>
-<p>Your digital marketplace, all in one place.</p>
-</div>
-
-<div class="services">
-<div class="card">
-<h3>Easy Experience</h3>
-<p>Simple navigation and a clean interface.</p>
-</div>
-
-<div class="card">
-<h3>Order Management</h3>
-<p>Track orders and transaction history.</p>
-</div>
-
-<div class="card">
-<h3>Customer Support</h3>
-<p>Get help when you need assistance.</p>
-</div>
-</div>
-</section>
 
 <section id="account">
+<div id="authArea" class="panel">
+<div class="form-card" id="registerBox">
+<h2>Create Your Account</h2>
+<input id="regName" placeholder="Full name" autocomplete="name">
+<input id="regEmail" type="email" placeholder="Email address" autocomplete="email">
+<input id="regPassword" type="password" placeholder="Create password" autocomplete="new-password">
+<button style="width:100%" onclick="register()">Create Account</button>
+<p>Already registered? <a onclick="showLogin()">Login here</a></p>
+<div id="regMessage" class="status"></div>
+</div>
+
+<div class="form-card hidden" id="loginBox">
+<h2>Customer Login</h2>
+<input id="loginEmail" type="email" placeholder="Email address" autocomplete="email">
+<input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password">
+<button style="width:100%" onclick="login()">Login</button>
+<p>New customer? <a onclick="showRegister()">Create account</a></p>
+<div id="loginMessage" class="status"></div>
+</div>
+</div>
+
+<div id="dashboard" class="hidden">
 <div class="heading">
-<h2>Join <span>PR02COL</span></h2>
-<p>Customer registration and login will be available in the next stage.</p>
+<h2>Welcome, <span id="customerName" class="red">Customer</span></h2>
+<p>Your PR02COL customer dashboard</p>
+</div>
+<div class="grid">
+<div class="card">
+<h3>My Wallet</h3>
+<div class="balance">₦0.00</div>
+<p>Wallet balance</p>
+</div>
+<div class="card">
+<h3>My Orders</h3>
+<div class="balance">0</div>
+<p>Orders will appear here.</p>
+</div>
+<div class="card">
+<h3>Transactions</h3>
+<div class="balance">0</div>
+<p>Your transaction history.</p>
+</div>
+</div>
+<div class="card" style="margin-top:20px">
+<h3>Account Information</h3>
+<p id="customerEmail"></p>
+<p class="notice">Your account is connected. Wallet funding, payments and order history will be added after secure database setup.</p>
+</div>
 </div>
 </section>
 
-<footer>
-<p>© 2026 PR02COL Marketplace. All rights reserved.</p>
-<p style="margin-top:10px">Your Digital Marketplace.</p>
-</footer>
+<footer>© 2026 PR02COL Marketplace. All rights reserved.</footer>
 
+<script>
+// PR02COL Supabase connection
+const SUPABASE_URL = "https://tyvmpcfqkaejibynxvpz.supabase.co";
+const SUPABASE_KEY = "sb_publishable_qY4iV-lxu-ya_XYN_Vj7lQ_Jiro2k_x";
+
+const db = window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+function message(id,text){
+document.getElementById(id).textContent=text;
+}
+
+function showLogin(){
+document.getElementById("registerBox").classList.add("hidden");
+document.getElementById("loginBox").classList.remove("hidden");
+}
+
+function showRegister(){
+document.getElementById("loginBox").classList.add("hidden");
+document.getElementById("registerBox").classList.remove("hidden");
+}
+
+async function register(){
+const name=document.getElementById("regName").value.trim();
+const email=document.getElementById("regEmail").value.trim();
+const password=document.getElementById("regPassword").value;
+
+if(!name||!email||!password){
+message("regMessage","Please complete all fields.");
+return;
+}
+if(password.length<8){
+message("regMessage","Password must have at least 8 characters.");
+return;
+}
+
+message("regMessage","Creating your account...");
+
+const {data,error}=await db.auth.signUp({
+email,
+password,
+options:{data:{full_name:name}}
+});
+
+if(error){
+message("regMessage",error.message);
+return;
+}
+
+if(data.session){
+showDashboard(data.user);
+}else{
+message("regMessage","Registration successful. Please check your email if confirmation is required.");
+}
+}
+
+async function login(){
+const email=document.getElementById("loginEmail").value.trim();
+const password=document.getElementById("loginPassword").value;
+
+if(!email||!password){
+message("loginMessage","Enter your email and password.");
+return;
+}
+
+message("loginMessage","Logging in...");
+
+const {data,error}=await db.auth.signInWithPassword({
+email,password
+});
+
+if(error){
+message("loginMessage",error.message);
+return;
+}
+
+showDashboard(data.user);
+}
+
+function showDashboard(user){
+document.getElementById("home").classList.add("hidden");
+document.getElementById("authArea").classList.add("hidden");
+document.getElementById("dashboard").classList.remove("hidden");
+document.getElementById("logoutBtn").classList.remove("hidden");
+document.getElementById("customerName").textContent=
+user.user_metadata?.full_name || "Customer";
+document.getElementById("customerEmail").textContent=
+"Email: "+user.email;
+document.getElementById("account").scrollIntoView();
+}
+
+async function logout(){
+await db.auth.signOut();
+location.reload();
+}
+
+async function checkSession(){
+const {data}=await db.auth.getSession();
+if(data.session){
+showDashboard(data.session.user);
+}
+}
+
+checkSession();
+</script>
 </body>
 </html>
