@@ -1,4 +1,172 @@
 
+-- PR02COL MARKETPLACE DATABASE
+
+-- 1. Customer profiles
+create table if not exists public.profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  full_name text,
+  created_at timestamptz default now()
+);
+
+-- 2. Customer wallets
+create table if not exists public.wallets (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  balance numeric(12,2) not null default 0 check (balance >= 0),
+  currency text not null default 'NGN',
+  updated_at timestamptz default now()
+);
+
+-- 3. Transaction history
+create table if not exists public.transactions (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  transaction_type text not null,
+  amount numeric(12,2) not null check (amount >= 0),
+  description text,
+  status text not null default 'pending',
+  created_at timestamptz default now()
+);
+
+-- 4. Marketplace services
+create table if not exists public.services (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  description text,
+  price numeric(12,2) not null default 0,
+  category text,
+  active boolean not null default true,
+  created_at timestamptz default now()
+);
+
+-- 5. Customer orders
+create table if not exists public.orders (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  service_id uuid references public.services(id),
+  amount numeric(12,2) not null check (amount >= 0),
+  status text not null default 'pending',
+  created_at timestamptz default now()
+);
+
+-- 6. Customer notifications
+create table if not exists public.notifications (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  title text not null,
+  message text,
+  is_read boolean not null default false,
+  created_at timestamptz default now()
+);
+
+-- 7. Customer support
+create table if not exists public.support_tickets (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  subject text not null,
+  message text not null,
+  status text not null default 'open',
+  created_at timestamptz default now()
+);
+
+-- ENABLE SECURITY
+alter table public.profiles enable row level security;
+alter table public.wallets enable row level security;
+alter table public.transactions enable row level security;
+alter table public.services enable row level security;
+alter table public.orders enable row level security;
+alter table public.notifications enable row level security;
+alter table public.support_tickets enable row level security;
+
+-- PROFILES
+drop policy if exists "Read own profile" on public.profiles;
+create policy "Read own profile"
+on public.profiles for select to authenticated
+using (auth.uid() = id);
+
+drop policy if exists "Update own profile" on public.profiles;
+create policy "Update own profile"
+on public.profiles for update to authenticated
+using (auth.uid() = id)
+with check (auth.uid() = id);
+
+-- WALLETS: customers can only read their own balance
+drop policy if exists "Read own wallet" on public.wallets;
+create policy "Read own wallet"
+on public.wallets for select to authenticated
+using (auth.uid() = user_id);
+
+-- TRANSACTIONS: customers can only read their own history
+drop policy if exists "Read own transactions" on public.transactions;
+create policy "Read own transactions"
+on public.transactions for select to authenticated
+using (auth.uid() = user_id);
+
+-- SERVICES: everyone can view active services
+drop policy if exists "Read active services" on public.services;
+create policy "Read active services"
+on public.services for select to authenticated
+using (active = true);
+
+-- ORDERS: customers can read their own orders
+drop policy if exists "Read own orders" on public.orders;
+create policy "Read own orders"
+on public.orders for select to authenticated
+using (auth.uid() = user_id);
+
+-- NOTIFICATIONS
+drop policy if exists "Read own notifications" on public.notifications;
+create policy "Read own notifications"
+on public.notifications for select to authenticated
+using (auth.uid() = user_id);
+
+-- SUPPORT TICKETS
+drop policy if exists "Read own support tickets" on public.support_tickets;
+create policy "Read own support tickets"
+on public.support_tickets for select to authenticated
+using (auth.uid() = user_id);
+
+drop policy if exists "Create own support tickets" on public.support_tickets;
+create policy "Create own support tickets"
+on public.support_tickets for insert to authenticated
+with check (auth.uid() = user_id);
+
+-- AUTOMATIC CUSTOMER PROFILE AND WALLET
+create or replace function public.create_customer_records()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  insert into public.profiles (id, full_name)
+  values (new.id, new.raw_user_meta_data ->> 'full_name')
+  on conflict (id) do nothing;
+
+  insert into public.wallets (user_id, balance, currency)
+  values (new.id, 0, 'NGN')
+  on conflict (user_id) do nothing;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+
+create trigger on_auth_user_created
+after insert on auth.users
+for each row execute function public.create_customer_records();
+
+-- CREATE RECORDS FOR EXISTING CUSTOMERS
+insert into public.profiles (id, full_name)
+select id, raw_user_meta_data ->> 'full_name'
+from auth.users
+on conflict (id) do nothing;
+
+insert into public.wallets (user_id, balance, currency)
+select id, 0, 'NGN'
+from auth.users
+on conflict (user_id) do nothing;
+
 -- =========================================
 -- PR02COL MARKETPLACE DATABASE
 -- Currency: Nigerian Naira (NGN)
@@ -217,3 +385,4 @@ on conflict (user_id) do nothing;
 -- =========================================
 -- END OF PR02COL DATABASE SETUP
 -- =========================================
+
